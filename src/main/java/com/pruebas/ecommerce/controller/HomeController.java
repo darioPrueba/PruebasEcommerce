@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.pruebas.ecommerce.model.DetalleOrden;
 import com.pruebas.ecommerce.model.Orden;
 import com.pruebas.ecommerce.model.Producto;
+import com.pruebas.ecommerce.model.Usuario;
+import com.pruebas.ecommerce.service.IUsuarioService;
 import com.pruebas.ecommerce.service.ProductoService;
 
 @Controller
@@ -28,7 +30,10 @@ public class HomeController {
 
 	@Autowired
 	private ProductoService productoService;
-
+	
+	@Autowired
+	private IUsuarioService usuarioService;
+	
 	// Para almacenar los detalles de cada orden
 	private List<DetalleOrden> detalles = new ArrayList<>();
 
@@ -123,8 +128,14 @@ public class HomeController {
 	}
 	
 	@GetMapping("/order")
-	public String resumenOrden () {
+	public String resumenOrden (Model model) {
 	
+	Usuario usuario = usuarioService.findById(1).get();	
+		
+	model.addAttribute("cart", detalles);
+	model.addAttribute("orden", orden);
+	model.addAttribute("usuario", usuario);
+		
 	return "usuario/resumenorden";	
 	}
 	
