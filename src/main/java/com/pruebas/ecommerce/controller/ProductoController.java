@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.pruebas.ecommerce.model.Producto;
 import com.pruebas.ecommerce.model.Usuario;
-import com.pruebas.ecommerce.service.ProductoService;
+import com.pruebas.ecommerce.service.IProductoService;
 import com.pruebas.ecommerce.service.UploadFileService;
 
 @Controller
@@ -28,7 +28,7 @@ public class ProductoController {
 
 	private final Logger LOGGER = LoggerFactory.getLogger(ProductoController.class);
 	@Autowired
-	private ProductoService productoService;
+	private IProductoService productoService;
 	@Autowired
 	private Usuario u2;
 	@Autowired
