@@ -1,6 +1,7 @@
 package com.pruebas.ecommerce.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,6 +21,8 @@ import com.pruebas.ecommerce.model.Orden;
 import com.pruebas.ecommerce.model.Producto;
 import com.pruebas.ecommerce.model.Usuario;
 import com.pruebas.ecommerce.service.IUsuarioService;
+import com.pruebas.ecommerce.service.IDetalleOrdenService;
+import com.pruebas.ecommerce.service.IOrdenService;
 import com.pruebas.ecommerce.service.IProductoService;
 
 @Controller
@@ -29,10 +32,13 @@ public class HomeController {
 	private final Logger LOG = LoggerFactory.getLogger(HomeController.class);;
 
 	@Autowired
-	private IProductoService productoService;
-	
+	private IProductoService productoService;	
 	@Autowired
 	private IUsuarioService usuarioService;
+	@Autowired
+	private IOrdenService ordenService;
+	@Autowired 
+	private IDetalleOrdenService detalleOrdenService;
 	
 	// Para almacenar los detalles de cada orden
 	private List<DetalleOrden> detalles = new ArrayList<>();
@@ -139,4 +145,31 @@ public class HomeController {
 	return "usuario/resumenorden";	
 	}
 	
+	@GetMapping("/saveOrder")
+	public String saveOrder() {
+		
+		Date fechaCreacion = new Date();
+		orden.setFechaCreacion(fechaCreacion);
+		orden.setNumero(ordenService.generarNumeroOrden());
+		
+		// Usuario // OJO que estoy pasando un número fijo
+		Usuario usuario = usuarioService.findById(1).get();		
+		
+		orden.setUsuario(usuario);
+		ordenService.save(orden);
+		
+		// Guardar detalle de la orden
+		
+		for (DetalleOrden detalleOrden : detalles) {
+			detalleOrden.setOrden(orden);
+			detalleOrdenService.save(detalleOrden);
+		}
+		
+		/// limpiar lista y orden
+		
+		orden = new Orden();
+		detalles.clear();
+		
+		return "redirect:/";
+	}
 }
