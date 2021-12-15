@@ -139,9 +139,9 @@ public class HomeController {
 	}
 	
 	@GetMapping("/order")
-	public String resumenOrden (Model model) {
+	public String resumenOrden (Model model, HttpSession session) {
 	
-	Usuario usuario = usuarioService.findById(1).get();	
+	Usuario usuario = usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();	
 		
 	model.addAttribute("cart", detalles);
 	model.addAttribute("orden", orden);
@@ -151,14 +151,14 @@ public class HomeController {
 	}
 	
 	@GetMapping("/saveOrder")
-	public String saveOrder() {
+	public String saveOrder(HttpSession session) {
 		
 		Date fechaCreacion = new Date();
 		orden.setFechaCreacion(fechaCreacion);
 		orden.setNumero(ordenService.generarNumeroOrden());
 		
 		// Usuario // OJO que estoy pasando un número fijo
-		Usuario usuario = usuarioService.findById(1).get();		
+		Usuario usuario = usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();		
 		
 		orden.setUsuario(usuario);
 		ordenService.save(orden);
