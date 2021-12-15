@@ -7,6 +7,8 @@ import java.util.Optional;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,8 +51,9 @@ public class HomeController {
 	private Orden orden = new Orden();
 
 	@GetMapping("")
-	public String home(Model model) {
+	public String home(Model model, HttpSession session) {
 
+		LOG.info("Sesion del usuario: {}", session.getAttribute("idusuario"));
 		model.addAttribute("productos", productoService.findAll());
 		return "usuario/home";
 	}
