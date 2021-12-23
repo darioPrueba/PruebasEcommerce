@@ -1,5 +1,6 @@
 package com.pruebas.ecommerce.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpSession;
@@ -10,10 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.pruebas.ecommerce.model.Orden;
 import com.pruebas.ecommerce.model.Usuario;
+import com.pruebas.ecommerce.service.IOrdenService;
 import com.pruebas.ecommerce.service.IUsuarioService;
 import com.pruebas.ecommerce.service.UsuarioServiceImpl;
 
@@ -25,6 +29,8 @@ public class userController {
 	
 	@Autowired
 	private IUsuarioService usuarioService;
+	@Autowired
+	private IOrdenService ordenService;
 	
 	@GetMapping("/registro")
 	public String create() {
@@ -75,11 +81,27 @@ public class userController {
 	@GetMapping("/compras")
 	public String obtenerCompras(HttpSession session, Model model) {
 		
-		model.addAttribute("sision", session.getAttribute("idusuario"));
-		
-		
+		Usuario u = usuarioService.findById(Integer.parseInt(session.getAttribute("idusuario").toString())).get();
+		model.addAttribute("sesion", session.getAttribute("idusuario"));
+		List<Orden> ordenes = ordenService.findByUsuario(u);
+		model.addAttribute("ordenes", ordenes);
 		return "usuario/compras";
 		
 	}
 
+	@GetMapping("/detalle/{id}")
+	public String detalleCompra(@PathVariable Integer id, HttpSession session, Model model) {
+		
+		Optional <Orden> orden = ordenService.findById(id);
+		LOG.info("Id de la orden: {}", id);
+
+		model.addAttribute("detalles", orden.get().getDetalle());
+		// Session
+		model.addAttribute("session", session.getAttribute("idusuario"));
+		//return "usuario/compras";
+		return "usuario/detallecompra";
+		
+	}
+	
+	
 }

@@ -20,7 +20,7 @@ public class DetalleOrden {
 	private double precio;
 	private double total;
 
-	@OneToOne
+	@ManyToOne
 	private Orden orden;
 	
 	@ManyToOne
@@ -31,7 +31,6 @@ public class DetalleOrden {
 	}
 	
 	public DetalleOrden(Integer id, String nombre, double cantidad, double precio, double total) {
-		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.cantidad = cantidad;
