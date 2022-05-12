@@ -8,10 +8,11 @@ import com.pruebas.ecommerce.model.Usuario;
 
 public interface IOrdenService {
 
-	public List <Orden> findAll();
-	public Orden save (Orden orden);
-	public String generarNumeroOrden();
+	
+	List <Orden> findAll();
+	Orden save (Orden orden);
+	String generarNumeroOrden();
 	List<Orden> findByUsuario(Usuario usuario);
-	public Optional <Orden> findById(Integer id);
+	Optional <Orden> findById(Integer id);
 
 }
