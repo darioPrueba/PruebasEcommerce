@@ -32,7 +32,7 @@ import com.pruebas.ecommerce.service.IProductoService;
 @Controller
 @RequestMapping("/")
 public class HomeController {
-
+ 
 	private final Logger LOG = LoggerFactory.getLogger(HomeController.class);;
 
 	@Autowired
